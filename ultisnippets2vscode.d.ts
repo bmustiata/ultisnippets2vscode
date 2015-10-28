@@ -23,6 +23,9 @@ declare module 'ultisnippets2vscode/lib/VisualStudioConverter' {
 	import { VisualStudioCodeSnippet } from 'ultisnippets2vscode/lib/VisualStudioOutput';
 	import { UltiSnippet } from 'ultisnippets2vscode/lib/UltiSnippetParser';
 	export function convertToVisualSnippet(ultiSnippet: UltiSnippet): VisualStudioCodeSnippet;
+	export interface VariablesIndex {
+	    [key: number]: string;
+	}
 
 }
 declare module 'ultisnippets2vscode' {

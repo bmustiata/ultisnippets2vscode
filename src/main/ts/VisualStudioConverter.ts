@@ -14,28 +14,47 @@ export function convertToVisualSnippet(ultiSnippet : UltiSnippet) : VisualStudio
 	return result
 }
 
+export interface VariablesIndex {
+	[key: number] : string
+}
+
 function convertCode(ultiSnippet : UltiSnippet) : Array<string> {
-	var variables : Array<string> = detectVariables(ultiSnippet.code)
+	var variables : VariablesIndex = detectVariables(ultiSnippet.code)
 	
 	return ultiSnippet.code
+				.map(replaceVariables(variables));
 }
 
 /**
  * Detect the variables names from a UltiSnips template. The variables
  * are surrounded by brackets for easier replacement.
  */
-function detectVariables(code : Array<string>) : Array<string> {
-	let result = ["0"];
+function detectVariables(code : Array<string>) : VariablesIndex {
+	let result: VariablesIndex = {0: "0"};
 	
 	code.forEach((line) => {
 		let matcher, index
-	
+		const VARIABLE_RE = /\$\{(\d+)\:(.*?)\}/g
+
 		do {
-			const VARIABLE_RE = /\$\{\d+\:(.*?)\}/
-			matcher = VARIABLE_RE.exec()
+			matcher = VARIABLE_RE.exec(line)
+			
 			if (matcher) {
-				console.log(matcher);
-			} 
+				let index = parseInt(matcher[1])
+				let variableName = matcher[2]
+				
+				result[index] = "{" + variableName + "}"
+			}
 		} while (matcher);
+	})
+	
+	return result
+}
+
+function replaceVariables( variables : VariablesIndex ) : (line: string) => string {
+	return (line) => line.replace(/\$(\d+)/g, function(subString, index) {
+		return "$" + variables[parseInt(index)]
+	}).replace(/\$\{(\d+)\:(.*?)\}/g, function(subString, index, varName) {
+		return "$" + variables[parseInt(index)]
 	})
 }
