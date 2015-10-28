@@ -1,4 +1,3 @@
-/// <reference path="../typings/nomnom/nomnom.d.ts" />
 declare module 'ultisnippets2vscode/lib/UltiSnippetParser' {
 	export interface UltiSnippet {
 	    macro: string;

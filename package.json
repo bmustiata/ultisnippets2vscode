@@ -6,17 +6,20 @@
     "email": "bogdan.mustiata@gmail.com"
   },
   "version": "0.1.0",
+  "bin" : {
+      "ultisnippets2vscode" : "lib/MainApplication.js"
+  },
   "dependencies": {
-    "ciplogic-dts-generator": "^1.5.0",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-mocha-test": "^0.12.7",
-    "grunt-ts": "^5.1.0",
-    "mocha": "^2.3.3",
     "nomnom": "^1.8.1",
     "terminal-console": "^0.2.0"
   },
   "devDependencies": {
-    "grunt": "^0.4.5"
+    "grunt": "^0.4.5",
+    "ciplogic-dts-generator": "^1.5.0",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-ts": "^5.1.0",
+    "mocha": "^2.3.3"
   },
   "keywords": [],
   "main": "./lib/MainApplication.js",

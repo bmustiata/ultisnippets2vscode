@@ -51,6 +51,10 @@ function detectVariables(code : Array<string>) : VariablesIndex {
 	return result
 }
 
+/**
+ * Returns a function that replaces the variables from a line of a
+ * UltiSnips template, into a line of visual studio code.
+ */
 function replaceVariables( variables : VariablesIndex ) : (line: string) => string {
 	return (line) => line.replace(/\$(\d+)/g, function(subString, index) {
 		return "$" + variables[parseInt(index)]
