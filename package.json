@@ -5,7 +5,7 @@
     "name": "Bogdan Mustiata",
     "email": "bogdan.mustiata@gmail.com"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "bin" : {
       "ultisnippets2vscode" : "lib/MainApplication.js"
   },
@@ -36,7 +36,6 @@
     "type": "git",
     "url": "https://github.com/bmustiata/ultisnippets2vscode.git"
   },
-  "readme": "A small utility that can convert some of the ultisnippets snippets into Visual Studio Code format.",
   "readmeFilename": "README.md",
   "homepage": "http://blog.ciplogic.com"
 }

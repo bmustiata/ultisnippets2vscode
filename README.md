@@ -48,5 +48,6 @@ Then in the `typescript.json` file the content would be:
 
 ## ChangeLog
 
+* 2015-10-28  v0.1.1  Added readme.
 * 2015-10-28  v0.1.0  Initial release.
 
