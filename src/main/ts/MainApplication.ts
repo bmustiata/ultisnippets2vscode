@@ -1,9 +1,9 @@
-#!/usr/bin/env node
 
-/// <reference path="../../../typings/nomnom/nomnom.d.ts" />
-/// <reference path="../../../typings/node/node.d.ts" />
 
-import * as fs from "fs"
+
+import fs = require("fs")
+
+
 import * as nomnom from "nomnom"
 import {TerminalConsole} from "terminal-console"
 
@@ -44,3 +44,4 @@ parseSnippets(ultiSnippets)
 var visualStudioCode = JSON.stringify(vsSnippets, null, 4);
 
 fs.writeFileSync(parameters.out, visualStudioCode, {encoding: "utf-8"})
+

@@ -6,20 +6,22 @@
     "email": "bogdan.mustiata@gmail.com"
   },
   "version": "0.1.1",
-  "bin" : {
-      "ultisnippets2vscode" : "lib/MainApplication.js"
+  "bin": {
+    "ultisnippets2vscode": "lib/MainApplication.js"
   },
   "dependencies": {
     "nomnom": "^1.8.1",
     "terminal-console": "^0.2.0"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "ciplogic-dts-generator": "^1.5.0",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-mocha-test": "^0.12.7",
-    "grunt-ts": "^5.1.0",
-    "mocha": "^2.3.3"
+    "@types/node": "^6.0.50",
+    "awesome-typescript-loader": "^2.2.4",
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0",
+    "typescript": "^2.0.3",
+    "webpack": "^1.13.2"
   },
   "keywords": [],
   "main": "./lib/MainApplication.js",

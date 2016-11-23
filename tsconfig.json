@@ -1,8 +1,12 @@
 {
     "compilerOptions": {
-        "target": "ES3",
+		"target": "ES2015",
         "module": "commonjs",
         "experimentalDecorators" : true,
-        "sourceMap": true
-    }
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "typeRoots": [
+            "typings", "node_modules/@types", "node_modules"
+        ]
+	}
 }
