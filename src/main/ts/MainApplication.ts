@@ -36,7 +36,8 @@ var vsSnippets : VisualStudioCodeSnippets = {}
 _(parameters["in"])
 	.map(snippetFileName => fs.readFileSync(snippetFileName, "utf-8"))
 	.map(parseSnippets)
-	.flatMap((snippet) => convertToVisualSnippet(<any>snippet))
+	.flatten()
+	.map((snippet) => convertToVisualSnippet(snippet))
 	.forEach(snippet => vsSnippets[snippet.prefix] = snippet)
 	
 var visualStudioCode = JSON.stringify(vsSnippets, null, 4);

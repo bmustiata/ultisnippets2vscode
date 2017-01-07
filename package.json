@@ -5,7 +5,7 @@
     "name": "Bogdan Mustiata",
     "email": "bogdan.mustiata@gmail.com"
   },
-  "version": "0.1.1",
+  "version": "0.2.0",
   "bin": {
     "ultisnippets2vscode": "lib/MainApplication.js"
   },
@@ -24,6 +24,7 @@
     "babel-polyfill": "^6.16.0",
     "lodash": "4.17.4",
     "nomnom": "^1.8.1",
+    "source-map-support": "0.4.8",
     "terminal-console": "^0.2.0"
   },
   "keywords": [],
@@ -44,4 +45,3 @@
   "readmeFilename": "README.md",
   "homepage": "http://blog.ciplogic.com"
 }
-

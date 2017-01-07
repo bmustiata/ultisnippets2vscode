@@ -1,7 +1,8 @@
 export interface UltiSnippet {
 	macro: string
 	description: string
-	code: Array<string>
+	code: Array<string>,
+	priority: number
 }
 
 enum ReadState {
@@ -13,6 +14,7 @@ export function parseSnippets(snippetCode : string) : Array<UltiSnippet> {
 	var result : Array<UltiSnippet> = []
 	var currentSnippet : UltiSnippet = null
 	var state : ReadState = ReadState.BLANK
+	var currentPriority = 0
 	
 	snippetCode.split(/\n/).forEach((line, index) => {
 		if (state == ReadState.BLANK) {
@@ -23,13 +25,19 @@ export function parseSnippets(snippetCode : string) : Array<UltiSnippet> {
 			if (/^\s*#.*$/.test(line)) {
 				return; //=> comment line, nothing to do.
 			}
+
+			if (/^priority \d+$/.test(line)) {
+				currentPriority = parseInt(/^priority (\d+)$/.exec(line)[1])
+				return; // priority for snippets.
+			}
 			
 			var m = /^snippet\s+(.*)\s+"(.*)"(\s+\w+\s*)?$/.exec(line)
 			if (m) {
 				currentSnippet = {
 					macro: m[1],
 					description: m[2],
-					code : []
+					code : [],
+					priority: currentPriority
 				}
 				
 				result.push(currentSnippet)

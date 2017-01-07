@@ -19,6 +19,10 @@ export interface VariablesIndex {
 }
 
 function convertCode(ultiSnippet : UltiSnippet) : Array<string> {
+	if (!ultiSnippet.code) {
+		throw new Error(`Snippet ${ultiSnippet.macro} has no code. (${ultiSnippet})`);
+	}
+
 	var variables : VariablesIndex = detectVariables(ultiSnippet.code)
 	
 	return ultiSnippet.code
