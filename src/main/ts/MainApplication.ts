@@ -1,4 +1,5 @@
 import fs = require("fs")
+import * as path from "path"
 import * as _ from "lodash"
 
 import * as nomnom from "nomnom"
@@ -9,9 +10,11 @@ import {convertToVisualSnippet} from "./VisualStudioConverter"
 import {VisualStudioCodeSnippets} from "./VisualStudioOutput" 
 
 interface ParserParameters {
-	in: Array<string>
+	in?: Array<string>
 	out: string
 	
+	filetype?: string
+
 	/**
 	 * Extra files on the command line
 	 */
@@ -23,19 +26,48 @@ var console = new TerminalConsole()
 var parameters: ParserParameters = nomnom.option("in", {
 	help: "UltiSnips input file.",
 	abbr: "i",
-	required: true,
+	required: false,
 	list: true
 }).option("out", {
 	help: "Visual Studio Code output file.",
 	abbr: "o",
 	required: true
+}).option("filetype", {
+	help: "VIM filetype in .format. Will be searched in VIM_ULTISNIPS_FOLDER environment variable location.",
+	abbr: "t",
+	required: false
 }).parse(process.argv)
 
-var vsSnippets : VisualStudioCodeSnippets = {}
+let vsSnippets : VisualStudioCodeSnippets = {}
+let fileNames : Array<string> = []
 
-_(parameters["in"])
-	.map(snippetFileName => fs.readFileSync(snippetFileName, "utf-8"))
-	.map(parseSnippets)
+if (parameters["in"]) {
+	fileNames.push(...parameters["in"])
+}
+
+if (parameters.filetype) {
+	const SNIPPETS_FOLDER = process.env.VIM_ULTISNIPS_FOLDER
+
+	if (!SNIPPETS_FOLDER) {
+		console.error("You need to set the VIM_ULTISNIPS_FOLDER environment variable to use the vim filetypes.")
+		process.exit(1)
+	}
+
+	parameters.filetype.split(".")
+		.map(it => `${path.join(SNIPPETS_FOLDER, it)}.snippets`)
+		.forEach(it => fileNames.push(it))
+}
+
+if (!fileNames.length) {
+	console.error("You need to pass in some snippets files to process using the actual " + 
+				  "snippets file (with --in) or the VIM file type string using (--filetype).")
+	process.exit(2)
+}
+
+_(fileNames)
+	.map(snippetFileName => parseSnippets(snippetFileName,
+					  					  fs.readFileSync(snippetFileName, "utf-8"))
+	)
 	.flatten()
 	// we remove the snippets that have regexp for matching
 	.filter((it : UltiSnippet) => {

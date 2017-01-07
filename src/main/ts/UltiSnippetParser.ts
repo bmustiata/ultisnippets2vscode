@@ -1,3 +1,6 @@
+import * as path from "path"
+import * as fs from "fs"
+
 export interface UltiSnippet {
 	macro: string
 	description: string
@@ -11,7 +14,7 @@ enum ReadState {
 	SNIPPET_CONTENT
 }
 
-export function parseSnippets(snippetCode : string) : Array<UltiSnippet> {
+export function parseSnippets(snippetsFile: string, snippetCode : string) : Array<UltiSnippet> {
 	var result : Array<UltiSnippet> = []
 	var currentSnippet : UltiSnippet = null
 	var state : ReadState = ReadState.BLANK
@@ -27,9 +30,26 @@ export function parseSnippets(snippetCode : string) : Array<UltiSnippet> {
 				return; //=> comment line, nothing to do.
 			}
 
-			if (/^priority \d+$/.test(line)) {
-				currentPriority = parseInt(/^priority (\d+)$/.exec(line)[1])
+			if (/^priority -?\d+$/.test(line)) {
+				currentPriority = parseInt(/^priority (-?\d+)$/.exec(line)[1])
 				return; // priority for snippets.
+			}
+
+			if (/^extends .+?$/.test(line)) {
+				try {
+					// FIXME: normally this should be a callback function of some sort probably,
+					// not just reading files, and reparsing.
+					let typeExtended = /^extends (.+?)$/.exec(line)[1]
+					var typeExtendedSnippetFile = path.join(path.dirname(snippetsFile), typeExtended) + ".snippets"
+					let extraSnippets = parseSnippets(typeExtendedSnippetFile,
+										fs.readFileSync(typeExtendedSnippetFile, "utf-8"))
+
+					result.push(...extraSnippets)
+				} catch (e) {
+					console.error(`Unable to parse: ${typeExtendedSnippetFile} required via ${snippetsFile}:${index + 1} : ${line}`, e)
+				}
+
+				return; // extended types
 			}
 			
 			var m = /^snippet\s+(.*)\s+"(.*)"(\s+(\w+)\s*)?$/.exec(line)
