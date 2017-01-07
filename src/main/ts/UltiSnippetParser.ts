@@ -2,7 +2,8 @@ export interface UltiSnippet {
 	macro: string
 	description: string
 	code: Array<string>,
-	priority: number
+	priority: number,
+	flags: string
 }
 
 enum ReadState {
@@ -31,13 +32,14 @@ export function parseSnippets(snippetCode : string) : Array<UltiSnippet> {
 				return; // priority for snippets.
 			}
 			
-			var m = /^snippet\s+(.*)\s+"(.*)"(\s+\w+\s*)?$/.exec(line)
+			var m = /^snippet\s+(.*)\s+"(.*)"(\s+(\w+)\s*)?$/.exec(line)
 			if (m) {
 				currentSnippet = {
 					macro: m[1],
 					description: m[2],
 					code : [],
-					priority: currentPriority
+					priority: currentPriority,
+					flags: m[4]
 				}
 				
 				result.push(currentSnippet)

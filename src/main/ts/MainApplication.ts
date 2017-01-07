@@ -37,10 +37,21 @@ _(parameters["in"])
 	.map(snippetFileName => fs.readFileSync(snippetFileName, "utf-8"))
 	.map(parseSnippets)
 	.flatten()
-	.map((snippet) => convertToVisualSnippet(snippet))
+	// we remove the snippets that have regexp for matching
+	.filter((it : UltiSnippet) => {
+		if (/r/.test(it.flags)) {
+			console.log(`Removing snippet ${it.macro} since it's an unsupported regexp.`)
+			return false
+		}
+
+		return true
+	})
+	// we sort the items by priority so the same trigger will be overwritten
+	// by the snippets with higher priority.
+	.sort((item1: UltiSnippet, item2: UltiSnippet) => item1.priority - item2.priority)
+	.map((snippet) => convertToVisualSnippet(<any>snippet))
 	.forEach(snippet => vsSnippets[snippet.prefix] = snippet)
 	
-var visualStudioCode = JSON.stringify(vsSnippets, null, 4);
+var visualStudioCode = JSON.stringify(vsSnippets, null, 4)
 
 fs.writeFileSync(parameters.out, visualStudioCode, {encoding: "utf-8"})
-
