@@ -14,7 +14,7 @@ enum ReadState {
 	SNIPPET_CONTENT
 }
 
-export function parseSnippets(snippetsFile: string, snippetCode : string) : Array<UltiSnippet> {
+export function parseSnippets(snippetsFile: string, snippetCode : string, verbose: boolean) : Array<UltiSnippet> {
 	var result : Array<UltiSnippet> = []
 	var currentSnippet : UltiSnippet = null
 	var state : ReadState = ReadState.BLANK
@@ -42,11 +42,13 @@ export function parseSnippets(snippetsFile: string, snippetCode : string) : Arra
 					let typeExtended = /^extends (.+?)$/.exec(line)[1]
 					var typeExtendedSnippetFile = path.join(path.dirname(snippetsFile), typeExtended) + ".snippets"
 					let extraSnippets = parseSnippets(typeExtendedSnippetFile,
-										fs.readFileSync(typeExtendedSnippetFile, "utf-8"))
+										fs.readFileSync(typeExtendedSnippetFile, "utf-8"),
+										verbose)
 
 					result.push(...extraSnippets)
 				} catch (e) {
-					console.error(`Unable to parse: ${typeExtendedSnippetFile} required via ${snippetsFile}:${index + 1} : ${line}`, e)
+					console.error(`Unable to parse: ${typeExtendedSnippetFile} required via ${snippetsFile}:${index + 1} : ${line}`, 
+								  verbose ? e : "")
 				}
 
 				return; // extended types

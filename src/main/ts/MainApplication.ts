@@ -14,6 +14,7 @@ interface ParserParameters {
 	out: string
 	
 	filetype?: string
+	verbose?: boolean
 
 	/**
 	 * Extra files on the command line
@@ -36,6 +37,11 @@ var parameters: ParserParameters = nomnom.option("in", {
 	help: "VIM filetype in .format. Will be searched in VIM_ULTISNIPS_FOLDER environment variable location.",
 	abbr: "t",
 	required: false
+}).option("verbose", {
+	help: "Show exceptions.",
+	abbr: "v",
+	required: false,
+	flag: true
 }).parse(process.argv)
 
 let vsSnippets : VisualStudioCodeSnippets = {}
@@ -53,7 +59,9 @@ if (parameters.filetype) {
 		process.exit(1)
 	}
 
-	parameters.filetype.split(".")
+	const filetype = `all.${parameters.filetype}`
+
+	filetype.split(".")
 		.map(it => `${path.join(SNIPPETS_FOLDER, it)}.snippets`)
 		.forEach(it => fileNames.push(it))
 }
@@ -65,12 +73,23 @@ if (!fileNames.length) {
 }
 
 _(fileNames)
-	.map(snippetFileName => parseSnippets(snippetFileName,
-					  					  fs.readFileSync(snippetFileName, "utf-8"))
-	)
+	.map(snippetFileName => {
+		try {
+			return parseSnippets(snippetFileName,
+								 fs.readFileSync(snippetFileName, "utf-8"),
+								 parameters.verbose)
+		} catch (e) {
+			console.warn(`Unable to parse ${snippetFileName}.`, parameters.verbose ? e : "")
+			return null
+		}
+	})
 	.flatten()
 	// we remove the snippets that have regexp for matching
 	.filter((it : UltiSnippet) => {
+		if (!it) { // mapping to an UltiSnippet failed
+			return false
+		}
+
 		if (/r/.test(it.flags)) {
 			console.log(`Removing snippet ${it.macro} since it's an unsupported regexp.`)
 			return false
