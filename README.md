@@ -46,6 +46,20 @@ Then in the `typescript.json` file the content would be:
 }
 ```
 
+## File Type
+
+If you're using multiple file types a lot, you can also use them, and specify via `-t`:
+
+```sh
+ultisnippets2vscode -t html.hbs.handlebars -o html.json
+```
+
+This will parse all the files from the folder specified in the environment variable
+`VIM_ULTISNIPS_FOLDER` named `all.snippets`, `html.snippets`, `hbs.snippets` and
+`handlebars.snippets` if they exist.
+
+`extends` and `priority` keywords are also respected.
+
 ## ChangeLog
 
 * 2017-01-07  v0.3.0  Vim filetypes support. (eg. html.hbs.txt)
