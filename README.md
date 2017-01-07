@@ -48,6 +48,8 @@ Then in the `typescript.json` file the content would be:
 
 ## ChangeLog
 
+* 2017-01-07  v0.3.0  Vim filetypes support. (eg. html.hbs.txt)
+* 2017-01-07  v0.2.0  Allow multiple input files. Priority.
 * 2015-10-28  v0.1.1  Added readme.
 * 2015-10-28  v0.1.0  Initial release.
 
