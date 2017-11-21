@@ -62,7 +62,24 @@ function detectVariables(code : Array<string>) : VariablesIndex {
 function replaceVariables( variables : VariablesIndex ) : (line: string) => string {
 	return (line) => line.replace(/\$(\d+)/g, function(subString, index) {
 		return "$" + variables[parseInt(index)]
-	}).replace(/\$\{(\d+)\:(.*?)\}/g, function(subString, index, varName) {
+	}).replace(/\$\{(\d+)\:(.*?)\}/g, function(subString, index, varContent) {
+		// if the variable is mapped to a VSCode constant, use it as a VSCode
+		// variable
+		if (/^TM_[\w\d]+$/.test(varContent)) {
+			return "$" + varContent
+		}
+
+		// currently end selection seem not supported in snippets anymore
+		if (index == 0) {
+			return "";
+		}
+
 		return "$" + variables[parseInt(index)]
+	}).replace(/\$\{(.*?)\}/g, function(subString, varContent) {
+		if (varContent == "VISUAL") {
+			return "$TM_SELECTED_TEXT"
+		}
+
+		return subString
 	})
 }
