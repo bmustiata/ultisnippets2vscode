@@ -45,9 +45,9 @@ function detectVariables(code : Array<string>) : VariablesIndex {
 			
 			if (matcher) {
 				let index = parseInt(matcher[1])
-				let variableName = matcher[2]
+				let variableContent = matcher[2]
 				
-				result[index] = "{" + variableName + "}"
+				result[index] = "{" + matcher[1] + ":" + variableContent + "}"
 			}
 		} while (matcher);
 	})
@@ -71,7 +71,7 @@ function replaceVariables( variables : VariablesIndex ) : (line: string) => stri
 
 		// currently end selection seem not supported in snippets anymore
 		if (index == 0) {
-			return "";
+			return "${0:}";
 		}
 
 		return "$" + variables[parseInt(index)]
@@ -80,6 +80,9 @@ function replaceVariables( variables : VariablesIndex ) : (line: string) => stri
 			return "$TM_SELECTED_TEXT"
 		}
 
+		if (/^TM_[\w\d]+$/.test(varContent)) {
+			return "$" + varContent
+		}
 		return subString
 	})
 }

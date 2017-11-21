@@ -5,7 +5,7 @@
     "name": "Bogdan Mustiata",
     "email": "bogdan.mustiata@gmail.com"
   },
-  "version": "0.3.1",
+  "version": "0.3.2",
   "bin": {
     "ultisnippets2vscode": "lib/MainApplication.js"
   },
